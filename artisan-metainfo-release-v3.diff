@@ -6,7 +6,7 @@ index 8303a20c..7950ddc5 100644
    </branding>
  
    <releases>
-+    <release version="3.0.0" date="2024-09-01">
++    <release version="3.0.0" date="2024-08-01">
 +      <url type="details">https://github.com/artisan-roaster-scope/artisan/releases/tag/v3.0.0</url>
 +      <description>
 +        <p>ADDITIONS</p>
