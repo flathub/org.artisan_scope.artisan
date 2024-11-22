@@ -57,8 +57,8 @@ modules:
     buildsystem: autotools
     sources:
       - type: archive
-        url: https://www.phidgets.com/downloads/phidget22/libraries/linux/libphidget22/libphidget22-1.19.20240411.tar.gz
-        sha256: 983a1856cd0b8416f7fafcca8f362bf4499caf3b66038732f7187938dc476b12
+        url: https://www.phidgets.com/downloads/phidget22/libraries/linux/libphidget22/libphidget22-1.20.20240909.tar.gz
+        sha256: db463b72e904ceafd17f6bfdd526130b5c82b52e29e5a686e1a2bcc7affa79b9
         x-checker-data:
           type: html
           url: https://www.phidgets.com/downloads/phidget22/libraries/linux/libphidget22/
@@ -112,8 +112,8 @@ modules:
     sources:
       - type: archive
         dest-filename: artisan.tar.gz
-        url: https://api.github.com/repos/artisan-roaster-scope/artisan/tarball/v3.0.2
-        sha256: a108b14a82262af4935f427525d5be1611988a6ec601c1a22da974f0232bdadf
+        url: https://api.github.com/repos/artisan-roaster-scope/artisan/tarball/v3.1.0
+        sha256: 21f2f9cff3927ba0d0896a8705c95aa438a405c80d0d4add2ddda1fab9f319c5
         x-checker-data:
           type: json
           url: https://api.github.com/repos/artisan-roaster-scope/artisan/releases/latest
