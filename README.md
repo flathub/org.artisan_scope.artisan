@@ -17,11 +17,15 @@ present in the BaseApp.
 Make sure you have the necessary tools installed:
 
 ```
-python3 -m pip install req2flatpak pip-tools
+python3 -m pip install req2flatpak pip-tools requirements-parser
 wget https://raw.githubusercontent.com/flatpak/flatpak-builder-tools/master/pip/flatpak-pip-generator
 ```
 
 Then copy the file `src/requirements.txt` from the version of Artisan you're updating to, to the current directory
 (e.g. with the help of `tar -x -z --strip-components=2 --wildcards -f vX.Y.Z.tar.gz \*/src/requirements.txt`),
 then run `update-dependencies.sh`.
+
+If there are issues, you may need to bring your Python version in-line with the one in the base image. Then
+also make sure the wrapper scripts for `req2flatpak` and `pip-compile` reference the correct Python version
+in the shebang line.
 
