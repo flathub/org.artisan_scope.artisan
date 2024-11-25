@@ -17,7 +17,7 @@ It requires the dependencies `pytest`, `hypothesis` and `pooch` as well as its o
 Build the flatpak
 
 ```sh
-flatpak-pip-generator pytest hypothesis pooch -o dep-python3-tests
+./flatpak-pip-generator pytest hypothesis pooch -o dep-python3-tests
 echo '  - dep-python3-tests.json' >>org.artisan_scope.artisan.yml
 sed -i 's/- \(python3 -m pip uninstall\)/- echo -- do not \1/' org.artisan_scope.artisan.yml
 sed -i 's/- find .* -name tests.*$/- echo skip tests/' org.artisan_scope.artisan.yml
