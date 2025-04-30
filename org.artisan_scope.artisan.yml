@@ -57,8 +57,8 @@ modules:
     buildsystem: autotools
     sources:
       - type: archive
-        url: https://www.phidgets.com/downloads/phidget22/libraries/linux/libphidget22/libphidget22-1.21.20241122.tar.gz
-        sha256: e9289bf4249a3d46c07721dfa12810ea0e288a4efea636fb83bf507ed49e5489
+        url: https://www.phidgets.com/downloads/phidget22/libraries/linux/libphidget22/libphidget22-1.22.20250324.tar.gz
+        sha256: 151ffe6f8cfbdcbb4641d4f8832a6b7bd4999994a25b33ff43ed34ba26b59610
         x-checker-data:
           type: html
           url: https://www.phidgets.com/downloads/phidget22/libraries/linux/libphidget22/
