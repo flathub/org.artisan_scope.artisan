@@ -110,8 +110,8 @@ modules:
     sources:
       - type: archive
         dest-filename: artisan.tar.gz
-        url: https://api.github.com/repos/artisan-roaster-scope/artisan/tarball/v3.1.2
-        sha256: 046d6dff1d1ef6bd43a1694fcd54bc9b1fed5a3f246edc365fc646edaa236372
+        url: https://api.github.com/repos/artisan-roaster-scope/artisan/tarball/v3.1.4
+        sha256: efc4e25b8a827e99a006822b6f559d24e861dd47357e00890c2c8d6552c1da89
         x-checker-data:
           type: json
           url: https://api.github.com/repos/artisan-roaster-scope/artisan/releases/latest
@@ -119,5 +119,3 @@ modules:
           url-query: .tarball_url
       - type: patch
         path: artisan-translations-path.diff
-      - type: patch
-        path: artisan-metainfo-markup.diff
