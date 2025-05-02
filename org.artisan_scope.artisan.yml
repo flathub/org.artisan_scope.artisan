@@ -119,3 +119,7 @@ modules:
           url-query: .tarball_url
       - type: patch
         path: artisan-translations-path.diff
+      - type: patch
+        path: artisan-metainfo.diff
+      - type: patch
+        path: artisan-version.diff
