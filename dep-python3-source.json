@@ -7,13 +7,13 @@
             "name": "python3-matplotlib",
             "buildsystem": "simple",
             "build-commands": [
-                "pip3 install --verbose --exists-action=i --no-index --find-links=\"file://${PWD}\" --prefix=${FLATPAK_DEST} \"matplotlib==3.10.1\" --no-build-isolation --config-settings=setup-args=\"-Dsystem-freetype=true\" --config-settings=setup-args=\"-Dsystem-qhull=true\""
+                "pip3 install --verbose --exists-action=i --no-index --find-links=\"file://${PWD}\" --prefix=${FLATPAK_DEST} \"matplotlib==3.10.3\" --no-build-isolation --config-settings=setup-args=\"-Dsystem-freetype=true\" --config-settings=setup-args=\"-Dsystem-qhull=true\""
             ],
             "sources": [
                 {
                     "type": "file",
-                    "url": "https://files.pythonhosted.org/packages/2f/08/b89867ecea2e305f408fbb417139a8dd941ecf7b23a2e02157c36da546f0/matplotlib-3.10.1.tar.gz",
-                    "sha256": "e8d2d0e3881b129268585bf4765ad3ee73a4591d77b9a18c214ac7e3a79fb2ba"
+                    "url": "https://files.pythonhosted.org/packages/26/91/d49359a21893183ed2a5b6c76bec40e0b1dcbf8ca148f864d134897cfc75/matplotlib-3.10.3.tar.gz",
+                    "sha256": "2f82d2c5bb7ae93aaaa4cd42aca65d76ce6376f83304fa3a630b569aca274df0"
                 },
                 {
                     "type": "file",
