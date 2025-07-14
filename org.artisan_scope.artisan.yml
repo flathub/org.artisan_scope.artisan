@@ -10,7 +10,8 @@ cleanup-commands:
   - for f in /usr/share/fonts/dejavu/*.ttf; do find /app -name `basename $f` -execdir
     ln -sf "$f" \; ; done
   # remove Python test suites
-  - find $FLATPAK_DEST/lib/python* -type d -name tests | grep -v /numpy/ | xargs rm -Rf
+  - find $FLATPAK_DEST/lib/python* -type d -name tests | grep -v /numpy/ | xargs rm
+    -Rf
   # Yoctupuce includes compiled libraries of various platforms *sigh*, only keep what we need
   - |
     python3 <<EOF
@@ -57,8 +58,8 @@ modules:
     buildsystem: autotools
     sources:
       - type: archive
-        url: https://www.phidgets.com/downloads/phidget22/libraries/linux/libphidget22/libphidget22-1.22.20250324.tar.gz
-        sha256: 151ffe6f8cfbdcbb4641d4f8832a6b7bd4999994a25b33ff43ed34ba26b59610
+        url: https://www.phidgets.com/downloads/phidget22/libraries/linux/libphidget22/libphidget22-1.22.20250714.tar.gz
+        sha256: 42c74dc9284990ab511cdb5eccef631766548a5ad36aa641313a7e51c58d9210
         x-checker-data:
           type: html
           url: https://www.phidgets.com/downloads/phidget22/libraries/linux/libphidget22/
