@@ -1,10 +1,10 @@
 id: org.artisan_scope.artisan
 runtime: org.kde.Platform
 sdk: org.kde.Sdk
-runtime-version: '6.8'
+runtime-version: '6.9'
 
 base: com.riverbankcomputing.PyQt.BaseApp
-base-version: '6.8'
+base-version: '6.9'
 cleanup-commands:
   # deduplicate (matplotlib) fonts already in runtime
   - for f in /usr/share/fonts/dejavu/*.ttf; do find /app -name `basename $f` -execdir
@@ -57,8 +57,8 @@ modules:
     buildsystem: autotools
     sources:
       - type: archive
-        url: https://www.phidgets.com/downloads/phidget22/libraries/linux/libphidget22/libphidget22-1.22.20250324.tar.gz
-        sha256: 151ffe6f8cfbdcbb4641d4f8832a6b7bd4999994a25b33ff43ed34ba26b59610
+        url: https://www.phidgets.com/downloads/phidget22/libraries/linux/libphidget22/libphidget22-1.23.20251006.tar.gz
+        sha256: 18dbc817e5e90cd2a8ab8a0f34709b8d81a5163dcf70482115125ec1e03c4bc5
         x-checker-data:
           type: html
           url: https://www.phidgets.com/downloads/phidget22/libraries/linux/libphidget22/
@@ -110,8 +110,8 @@ modules:
     sources:
       - type: archive
         dest-filename: artisan.tar.gz
-        url: https://api.github.com/repos/artisan-roaster-scope/artisan/tarball/v3.2.0
-        sha256: d2164c343e0b1ead99f84ba159f002af234b6752fee8dd168a4db9f01bd84b4d
+        url: https://api.github.com/repos/artisan-roaster-scope/artisan/tarball/v3.4.0
+        sha256: a07c68acb0ef90378acc5cb04c76ea83a94bb4684bf4add6795e9e317c0a0022
         x-checker-data:
           type: json
           url: https://api.github.com/repos/artisan-roaster-scope/artisan/releases/latest
