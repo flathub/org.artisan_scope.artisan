@@ -1,10 +1,10 @@
 id: org.artisan_scope.artisan
 runtime: org.kde.Platform
 sdk: org.kde.Sdk
-runtime-version: '6.9'
+runtime-version: '6.10'
 
 base: com.riverbankcomputing.PyQt.BaseApp
-base-version: '6.9'
+base-version: '6.10'
 cleanup-commands:
   # deduplicate (matplotlib) fonts already in runtime
   - for f in /usr/share/fonts/dejavu/*.ttf; do find /app -name `basename $f` -execdir
@@ -51,14 +51,12 @@ finish-args:
   - --env=QTWEBENGINEPROCESS_PATH=/app/bin/QtWebEngineProcess
 
 modules:
-  - ./shared-modules/libusb/libusb.json
-
   - name: phidgets
     buildsystem: autotools
     sources:
       - type: archive
-        url: https://www.phidgets.com/downloads/phidget22/libraries/linux/libphidget22/libphidget22-1.23.20251006.tar.gz
-        sha256: 18dbc817e5e90cd2a8ab8a0f34709b8d81a5163dcf70482115125ec1e03c4bc5
+        url: https://www.phidgets.com/downloads/phidget22/libraries/linux/libphidget22/libphidget22-1.24.20260127.tar.gz
+        sha256: b1682ffb4a9a7d4589ec24256cbd30af1342880914117d3e3f4814e70049238c
         x-checker-data:
           type: html
           url: https://www.phidgets.com/downloads/phidget22/libraries/linux/libphidget22/
@@ -68,6 +66,7 @@ modules:
     buildsystem: cmake-ninja
     config-opts:
       - -DBUILD_STATIC_LIBS=OFF
+      - -DCMAKE_POLICY_VERSION_MINIMUM=3.5
       #- -DBUILD_APPLICATIONS=OFF for qhull 8.1+
     sources:
       - type: archive
@@ -110,8 +109,8 @@ modules:
     sources:
       - type: archive
         dest-filename: artisan.tar.gz
-        url: https://api.github.com/repos/artisan-roaster-scope/artisan/tarball/v3.4.0
-        sha256: a07c68acb0ef90378acc5cb04c76ea83a94bb4684bf4add6795e9e317c0a0022
+        url: https://api.github.com/repos/artisan-roaster-scope/artisan/tarball/v4.0.0
+        sha256: bf02a8c19485b06e8f7025bc880af5bcc4e001b905ed05fc24dafd2ef70d0545
         x-checker-data:
           type: json
           url: https://api.github.com/repos/artisan-roaster-scope/artisan/releases/latest
