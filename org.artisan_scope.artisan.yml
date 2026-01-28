@@ -10,7 +10,8 @@ cleanup-commands:
   - for f in /usr/share/fonts/dejavu/*.ttf; do find /app -name `basename $f` -execdir
     ln -sf "$f" \; ; done
   # remove Python test suites
-  - find $FLATPAK_DEST/lib/python* -type d -name tests | grep -v /numpy/ | xargs rm -Rf
+  - find $FLATPAK_DEST/lib/python* -type d -name tests | grep -v /numpy/ | xargs rm
+    -Rf
   # Yoctupuce includes compiled libraries of various platforms *sigh*, only keep what we need
   - |
     python3 <<EOF
@@ -57,8 +58,8 @@ modules:
     buildsystem: autotools
     sources:
       - type: archive
-        url: https://www.phidgets.com/downloads/phidget22/libraries/linux/libphidget22/libphidget22-1.23.20251006.tar.gz
-        sha256: 18dbc817e5e90cd2a8ab8a0f34709b8d81a5163dcf70482115125ec1e03c4bc5
+        url: https://www.phidgets.com/downloads/phidget22/libraries/linux/libphidget22/libphidget22-1.24.20260127.tar.gz
+        sha256: b1682ffb4a9a7d4589ec24256cbd30af1342880914117d3e3f4814e70049238c
         x-checker-data:
           type: html
           url: https://www.phidgets.com/downloads/phidget22/libraries/linux/libphidget22/
@@ -110,8 +111,8 @@ modules:
     sources:
       - type: archive
         dest-filename: artisan.tar.gz
-        url: https://api.github.com/repos/artisan-roaster-scope/artisan/tarball/v3.4.0
-        sha256: a07c68acb0ef90378acc5cb04c76ea83a94bb4684bf4add6795e9e317c0a0022
+        url: https://api.github.com/repos/artisan-roaster-scope/artisan/tarball/v4.0.0
+        sha256: bf02a8c19485b06e8f7025bc880af5bcc4e001b905ed05fc24dafd2ef70d0545
         x-checker-data:
           type: json
           url: https://api.github.com/repos/artisan-roaster-scope/artisan/releases/latest
