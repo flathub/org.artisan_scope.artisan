@@ -30,7 +30,9 @@ cleanup-commands:
   - rm -Rf $FLATPAK_DEST/libexec/webenginedriver
   # cleanup base
   - /app/cleanup-BaseApp.sh
-
+build-options:
+  env:
+    - BASEAPP_REMOVE_WEBENGINE=1
 command: artisan
 separate-locales: false
 finish-args:
