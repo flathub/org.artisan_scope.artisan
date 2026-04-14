@@ -22,12 +22,6 @@ cleanup-commands:
     keep = [basename(f) for f in [YAPI._yApiCLibFile]] # might include YAPI._yApiCLibFileFallback
     [remove(join(dir, f)) for f in listdir(dir) if f not in keep]
     EOF
-  # cleanup QtWebEngine dictionaries, which we don't need and use quite some space
-  - find $FLATPAK_DEST/share/locale -name \*.bdic | xargs rm -f
-  - rm -Rf $FLATPAK_DEST/qtwebengine_dictionaries
-  # we need no QtWebEngine developer tools, nor automation driver
-  - rm -f $FLATPAK_DEST/resources/qtwebengine_devtools_resources.pak
-  - rm -Rf $FLATPAK_DEST/libexec/webenginedriver
   # cleanup base
   - /app/cleanup-BaseApp.sh
 build-options:
