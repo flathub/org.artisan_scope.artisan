@@ -93,7 +93,7 @@ filter_sources('dep-python3-source.json', installed_run + installed_build)
 EOF
 
 # let matplotlib use system libraries
-sed -i 's/\("pip3 install .*matplotlib.*\)"$/\1 --config-settings=setup-args=\\"-Dsystem-freetype=true\\" --config-settings=setup-args=\\"-Dsystem-qhull=true\\""/' dep-python3-source.json
+sed -i 's/\("pip3 install .*matplotlib.*\)"$/\1 --config-settings=setup-args=\\"-Dsystem-freetype=true\\" --config-settings=setup-args=\\"-Dsystem-qhull=true\\" --config-settings=setup-args=\\"-Dsystem-libraqm=true\\""/' dep-python3-source.json
 
 # cleanup (comment when debugging this file)
 rm -f requirements-filtered.txt requirements-filtered.frozen.txt requirements-binary-run.frozen.txt requirements-binary-build.frozen.txt requirements-source.frozen.txt

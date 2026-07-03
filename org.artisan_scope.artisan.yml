@@ -55,8 +55,8 @@ modules:
     buildsystem: autotools
     sources:
       - type: archive
-        url: https://www.phidgets.com/downloads/phidget22/libraries/linux/libphidget22/libphidget22-1.24.20260127.tar.gz
-        sha256: b1682ffb4a9a7d4589ec24256cbd30af1342880914117d3e3f4814e70049238c
+        url: https://www.phidgets.com/downloads/phidget22/libraries/linux/libphidget22/libphidget22-1.25.20260512.tar.gz
+        sha256: c2b2cf3f7da03a35ec7b074b5027bb95452a7e26f77a0ace38d7b2f667147d5f
         x-checker-data:
           type: html
           url: https://www.phidgets.com/downloads/phidget22/libraries/linux/libphidget22/
@@ -76,6 +76,21 @@ modules:
       - /bin   # when using as library
       - /share/man
       - /share/doc
+
+  - name: raqm
+    buildsystem: meson
+    config-opts:
+      - --libdir=lib # uses lib64 by default
+      - --buildtype=release
+    sources:
+      - type: archive
+        url: https://github.com/HOST-Oman/libraqm/releases/download/v0.10.5/raqm-0.10.5.tar.xz
+        sha256: 563053e724892a7b037913110ea2daef50ad575d4fa9f7c368ae1e4515f5e856
+        x-checker-data:
+          type: json
+          url: https://api.github.com/repos/artisan-roaster-scope/artisan/releases/latest
+          version-query: .tag_name | sub("^v"; "")
+          url-query: .tarball_url
 
   - ./dep-python3-wheels-run.json
   - ./dep-python3-wheels-build.json
@@ -109,8 +124,8 @@ modules:
     sources:
       - type: archive
         dest-filename: artisan.tar.gz
-        url: https://api.github.com/repos/artisan-roaster-scope/artisan/tarball/v4.0.2
-        sha256: 94f66bf46a06d4eba7f40123e5eaf02e38da0d8af4aa9a8c9dd67afbee099f1e
+        url: https://api.github.com/repos/artisan-roaster-scope/artisan/tarball/v4.2.0
+        sha256: a6b38dafd2675c64f7905f7d9b7045008d6bff492411c5543408135ec4515ceb
         x-checker-data:
           type: json
           url: https://api.github.com/repos/artisan-roaster-scope/artisan/releases/latest
