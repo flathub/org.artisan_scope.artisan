@@ -23,17 +23,29 @@ if ! which req2flatpak >/dev/null; then
     exit 1
 fi
 
-if [ ! -e flatpak-pip-generator ]; then
-    echo "Please download flatpak-pip-generator" 1>&2
-    echo "  wget https://raw.githubusercontent.com/flatpak/flatpak-builder-tools/master/pip/flatpak-pip-generator" 1>&2
+if ! which flatpak-pip-generator >/dev/null; then
+    echo "Please pip install flatpak-pip-generator" 1>&2
     exit 1
 fi
 
 BASEAPP_ID=`cat org.artisan_scope.artisan.yml | sed 's/^base:\s*//p;d'`
 BASEAPP_VER=`cat org.artisan_scope.artisan.yml | sed 's/^base-version:\s*//p;d' | sed "s/'//g"`
+RUNTIME_ID=`cat org.artisan_scope.artisan.yml | sed 's/^runtime:\s*//p;d'`
+RUNTIME_VER=`cat org.artisan_scope.artisan.yml | sed 's/^runtime-version:\s*//p;d' | sed "s/'//g"`
 
 # Get Python version for req2flatpak
-PYTHONVER=`flatpak run --command=python3 $BASEAPP_ID//$BASEAPP_VER --version | sed 's/^Python \([0-9]\+\)\.\([0-9]\+\).*$/\1\2/'`
+if which flatpak >/dev/null; then
+    # regular method using flatpak
+    PYTHONVER=`flatpak run --command=python3 $BASEAPP_ID//$BASEAPP_VER --version | sed 's/^Python \([0-9]\+\)\.\([0-9]\+\).*$/\1\2/'`
+elif [ "${RUNTIME_ID}" = "org.kde.Platform" ]; then
+    # on Github Actions, we may not have flatpak run available, fallback to getting it online; assumes kde uses freedesktop
+    FD_VER=`curl -s "https://invent.kde.org/packaging/flatpak-kde-runtime/-/raw/qt${RUNTIME_VER}/org.kde.Sdk.json.in" | sed 's/^\s*"runtime-version":\s*"\(.*\)",$/\1/p;d'`
+    PY_VER=`curl -s "https://gitlab.com/freedesktop-sdk/freedesktop-sdk/-/raw/release/${FD_VER}/elements/include/python3.yml" | sed 's/^\s*ref:\s*//p;d'`
+    PYTHONVER=`echo "$PY_VER" | sed 's/^v\?\([0-9]\+\)\.\([0-9]\+\).*$/\1\2/'`
+else
+    echo "Could not determine Python version; probably the baseapp is different than expected." 1>&2
+    exit 1
+fi
 
 if [ ! "$PYTHONVER" ]; then
     echo "Could not discover Python version, is the BaseApp installed?" 1>&2
@@ -58,12 +70,12 @@ cat requirements-filtered.frozen.txt | grep -v '\(^pillow\|^matplotlib\|^meson-p
 cat requirements-filtered.frozen.txt | grep    '\(^meson-python\|^cppy\|^pybind11\)' >requirements-binary-build.frozen.txt
 cat requirements-filtered.frozen.txt | grep    '\(^pillow\|^matplotlib\)' >requirements-source.frozen.txt
 # runtime, from binary wheels
-req2flatpak --requirements-file requirements-binary-run.frozen.txt --target-platforms $PYTHONVER-x86_64 $PYTHONVER-aarch64 >dep-python3-wheels-run.json
+req2flatpak --requirements-file requirements-binary-run.frozen.txt --target-platforms "$PYTHONVER-x86_64" "$PYTHONVER-aarch64" >dep-python3-wheels-run.json
 # build-time, from binary wheels
-req2flatpak --requirements-file requirements-binary-build.frozen.txt --target-platforms $PYTHONVER-x86_64 $PYTHONVER-aarch64 >dep-python3-wheels-build.json
+req2flatpak --requirements-file requirements-binary-build.frozen.txt --target-platforms "$PYTHONVER-x86_64" "$PYTHONVER-aarch64" >dep-python3-wheels-build.json
 
 # runtime, from source (to reuse system libraries)
-python3 flatpak-pip-generator --runtime "${BASEAPP_ID}//${BASEAPP_VER}" -r requirements-source.frozen.txt -o dep-python3-source
+flatpak-pip-generator --runtime "${BASEAPP_ID}//${BASEAPP_VER}" -r requirements-source.frozen.txt -o dep-python3-source
 
 # remove dependencies already present in previous steps
 python3 <<EOF

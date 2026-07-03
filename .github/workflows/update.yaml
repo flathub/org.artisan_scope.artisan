@@ -1,0 +1,55 @@
+name: Check for updates
+
+on:
+  workflow_dispatch: {}
+  repository_dispatch:
+    types: [trigger-workflow]
+
+jobs:
+  flatpak-external-data-checker:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: write
+      pull-requests: write
+
+    if: github.repository_owner == 'flathub'
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: docker://ghcr.io/flathub-infra/flatpak-external-data-checker:latest
+        with:
+          args: --update --edit-only org.artisan_scope.artisan.yml
+
+      - name: Update sources
+        run: |
+          # download artisan source as specified in manifest
+          SRC=`cat org.artisan_scope.artisan.yml | yq '.modules[] | select(.name == "artisan") | .sources[] | select(.dest-filename == "artisan.tar.gz") | .url'`
+          SHA256=`cat org.artisan_scope.artisan.yml | yq '.modules[] | select(.name == "artisan") | .sources[] | select(.dest-filename == "artisan.tar.gz") | .sha256'`
+          curl -q "${SRC}" >artisan.tar.gz
+          echo "${SHA256} artisan.tar.gz" >artisan.tar.gz.sha256
+          sha256sum -c artisan.tar.gz.sha256
+          # mention version in metainfo (to verify it was updated)
+          METAINFO_VERSION=`tar -x -z -f artisan.tar.gz -O --wildcards '*/src/debian/usr/share/metainfo/org.artisan_scope.artisan.metainfo.xml' | sed 's/^\s*<release.*version="\([^"]\+\)".*$/\1/p;d' | head -n1`
+          echo "*** Artisan version in metainfo: ${METAINFO_VERSION}"
+          # obtain requirements.txt
+          tar -x -z -f artisan.tar.gz --strip-components=2 --wildcards '*/src/requirements.txt'
+          # install the tools we need
+          python3 -m pip install req2flatpak pip-tools requirements-parser flatpak-pip-generator
+          # generate dependency files
+          ./update-dependencies.sh
+
+      - name: Create pull request
+        if: ${{ success() }}
+        id: create-pr
+        uses: peter-evans/create-pull-request@v7
+        with:
+          branch-suffix: random
+          commit-message: Update modules
+          title: Update modules
+          body: Update modules
+          delete-branch: true
+          sign-commits: true
+          committer: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
+          author: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
