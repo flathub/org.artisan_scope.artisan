@@ -10,7 +10,8 @@ cleanup-commands:
   - for f in /usr/share/fonts/dejavu/*.ttf; do find /app -name `basename $f` -execdir
     ln -sf "$f" \; ; done
   # remove Python test suites
-  - find $FLATPAK_DEST/lib/python* -type d -name tests | grep -v /numpy/ | xargs rm -Rf
+  - find $FLATPAK_DEST/lib/python* -type d -name tests | grep -v /numpy/ | xargs rm
+    -Rf
   # Yoctupuce includes compiled libraries of various platforms *sigh*, only keep what we need
   - |
     python3 <<EOF
@@ -84,8 +85,8 @@ modules:
       - --buildtype=release
     sources:
       - type: archive
-        url: https://github.com/HOST-Oman/libraqm/releases/download/v0.10.5/raqm-0.10.5.tar.xz
-        sha256: 563053e724892a7b037913110ea2daef50ad575d4fa9f7c368ae1e4515f5e856
+        url: https://api.github.com/repos/HOST-Oman/libraqm/tarball/v0.10.5
+        sha256: 9232b882528fb2e7f97f0aa13eaf094d72a3b8f52028fd42abe200b106456b0b
         x-checker-data:
           type: json
           url: https://api.github.com/repos/HOST-Oman/libraqm/releases/latest
