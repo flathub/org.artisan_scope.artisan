@@ -90,7 +90,7 @@ modules:
           type: json
           url: https://api.github.com/repos/HOST-Oman/libraqm/releases/latest
           version-query: .tag_name | sub("^v"; "")
-          url-query: .tarball_url
+          url-query: .assets[] | select(.content_type = "application/x-xz") | .browser_download_url
 
   - ./dep-python3-wheels-run.json
   - ./dep-python3-wheels-build.json
