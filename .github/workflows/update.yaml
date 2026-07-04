@@ -27,7 +27,7 @@ jobs:
           # download artisan source as specified in manifest
           SRC=`cat org.artisan_scope.artisan.yml | yq '.modules[] | select(.name == "artisan") | .sources[] | select(.dest-filename == "artisan.tar.gz") | .url'`
           SHA256=`cat org.artisan_scope.artisan.yml | yq '.modules[] | select(.name == "artisan") | .sources[] | select(.dest-filename == "artisan.tar.gz") | .sha256'`
-          curl -q "${SRC}" >artisan.tar.gz
+          curl -s -L --output artisan.tar.gz  "${SRC}"
           echo "${SHA256} artisan.tar.gz" >artisan.tar.gz.sha256
           sha256sum -c artisan.tar.gz.sha256
           # mention version in metainfo (to verify it was updated)
