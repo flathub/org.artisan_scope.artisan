@@ -36,7 +36,7 @@ jobs:
           # obtain requirements.txt
           tar -x -z -f artisan.tar.gz --strip-components=2 --wildcards '*/src/requirements.txt'
           # install the tools we need
-          python3 -m pip install req2flatpak pip-tools requirements-parser flatpak-pip-generator
+          python3 -m pip install req2flatpak pip-tools requirements-parser
           # generate dependency files
           ./update-dependencies.sh
 

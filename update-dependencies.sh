@@ -23,9 +23,8 @@ if ! which req2flatpak >/dev/null; then
     exit 1
 fi
 
-if ! which flatpak-pip-generator >/dev/null; then
-    echo "Please pip install flatpak-pip-generator" 1>&2
-    exit 1
+if [ ! -x ./flatpak-pip-generator.py ]; then
+    curl -s -O https://raw.githubusercontent.com/flatpak/flatpak-builder-tools/refs/heads/master/pip/flatpak-pip-generator.py >flatpak-pip-generator.py
 fi
 
 BASEAPP_ID=`cat org.artisan_scope.artisan.yml | sed 's/^base:\s*//p;d'`
@@ -75,7 +74,7 @@ req2flatpak --requirements-file requirements-binary-run.frozen.txt --target-plat
 req2flatpak --requirements-file requirements-binary-build.frozen.txt --target-platforms "$PYTHONVER-x86_64" "$PYTHONVER-aarch64" >dep-python3-wheels-build.json
 
 # runtime, from source (to reuse system libraries)
-flatpak-pip-generator --runtime "${BASEAPP_ID}//${BASEAPP_VER}" -r requirements-source.frozen.txt -o dep-python3-source
+python3 flatpak-pip-generator.py --runtime "${BASEAPP_ID}//${BASEAPP_VER}" -r requirements-source.frozen.txt -o dep-python3-source
 
 # remove dependencies already present in previous steps
 python3 <<EOF
