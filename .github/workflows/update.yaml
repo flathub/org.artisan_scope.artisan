@@ -28,8 +28,8 @@ jobs:
       - name: Update sources
         run: |
           # download artisan source as specified in manifest
-          SRC=`cat org.artisan_scope.artisan.yml |  sed 's/^\s*url:\s*\(https:\/\/github\.com\/artisan-roaster-scope\/artisan\/.*\)\s*$/\1/p;d'`
-          SHA256=`cat org.artisan_scope.artisan.yml | grep -A1 '^\s*url:\s*https://github\.com/artisan-roaster-scope/artisan/.*\s*$' | sed 's/^\s*sha256:\s*//p;d'`
+          SRC=`cat org.artisan_scope.artisan.yml | sed 's/^\s*url:\s*\(.*\/artisan-roaster-scope\/artisan\/[^ ]\+\)\s*$/\1/p;d' | head -n1`
+          SHA256=`cat org.artisan_scope.artisan.yml | grep -A1 '^\s*url:.*/artisan-roaster-scope/artisan/' | sed 's/^\s*sha256:\s*//p;d'`
           curl -s -L --output artisan.tar.gz  "${SRC}"
           echo "${SHA256} artisan.tar.gz" >artisan.tar.gz.sha256
           sha256sum -c artisan.tar.gz.sha256
