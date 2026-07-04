@@ -8,6 +8,9 @@ on:
 jobs:
   flatpak-external-data-checker:
     runs-on: ubuntu-latest
+    container: # allow running flatpak
+      image: ghcr.io/flathub-infra/flatpak-github-actions:freedesktop-25.08
+      options: --privileged
     timeout-minutes: 20
     permissions:
       contents: write
@@ -25,8 +28,8 @@ jobs:
       - name: Update sources
         run: |
           # download artisan source as specified in manifest
-          SRC=`cat org.artisan_scope.artisan.yml | yq '.modules[] | select(.name == "artisan") | .sources[] | select(.dest-filename == "artisan.tar.gz") | .url'`
-          SHA256=`cat org.artisan_scope.artisan.yml | yq '.modules[] | select(.name == "artisan") | .sources[] | select(.dest-filename == "artisan.tar.gz") | .sha256'`
+          SRC=`cat org.artisan_scope.artisan.yml | sed 's/^.*url:\s*\(.*artisan-roaster-scope\/artisan.*\.tar\.gz\)\s*$/\1/p;d'`
+          SHA256=`cat org.artisan_scope.artisan.yml | grep -A1 '^.*url:.*artisan-roaster-scope/artisan.*\.tar\.gz\s*$' | sed 's/^\s*sha256:\s*//p;d'`
           curl -s -L --output artisan.tar.gz  "${SRC}"
           echo "${SHA256} artisan.tar.gz" >artisan.tar.gz.sha256
           sha256sum -c artisan.tar.gz.sha256
@@ -37,8 +40,19 @@ jobs:
           tar -x -z -f artisan.tar.gz --strip-components=2 --wildcards '*/src/requirements.txt'
           # install the tools we need
           python3 -m pip install req2flatpak pip-tools requirements-parser
+          curl -s -O https://raw.githubusercontent.com/flatpak/flatpak-builder-tools/refs/heads/master/pip/flatpak-pip-generator.py >flatpak-pip-generator.py
+          # install baseapp
+          BASEAPP_ID=`cat org.artisan_scope.artisan.yml | sed 's/^base:\s*//p;d'`
+          BASEAPP_VER=`cat org.artisan_scope.artisan.yml | sed 's/^base-version:\s*//p;d' | sed "s/'//g"`
+          flatpak install -y --noninteractive "${BASEAPP_ID}//${BASEAPP_VER}"
+          # install sdk (for flatpak-pip-generator)
+          SDK_ID=`cat org.artisan_scope.artisan.yml | sed 's/^sdk:\s*//p;d'`
+          RUNTIME_VER=`cat org.artisan_scope.artisan.yml | sed 's/^runtime-version:\s*//p;d' | sed "s/'//g"`
+          flatpak install -y --noninteractive "${SDK_ID}//${RUNTIME_VER}"
           # generate dependency files
           ./update-dependencies.sh
+          # cleanup before creating update PR
+          rm -f artisan.tar.gz artisan.tar.gz.sha256 requirements.txt flatpak-pip-generator.py
 
       - name: Create pull request
         if: ${{ success() }}

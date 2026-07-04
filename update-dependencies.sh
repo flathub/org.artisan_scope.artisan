@@ -7,6 +7,7 @@
 # are installed from source, so that system libraries present in the runtime can
 # be used.
 #
+set -eu
 
 if [ ! -e requirements.txt ]; then
     echo "Please copy the packaged Artisan's requirements.txt to the directory you're in." 1>&2
@@ -23,31 +24,25 @@ if ! which req2flatpak >/dev/null; then
     exit 1
 fi
 
-if [ ! -x ./flatpak-pip-generator.py ]; then
-    curl -s -O https://raw.githubusercontent.com/flatpak/flatpak-builder-tools/refs/heads/master/pip/flatpak-pip-generator.py >flatpak-pip-generator.py
+if ! which flatpak >/dev/null; then
+    echo "Please install flatpak (this is a requirement for flatpak-pip-generator)" 1>&2
+    exit 1
+fi
+
+if [ ! -e ./flatpak-pip-generator.py ]; then
+    echo "Please download flatpak-pip-generator.py" 1>&2
+    echo "curl -s -O https://raw.githubusercontent.com/flatpak/flatpak-builder-tools/refs/heads/master/pip/flatpak-pip-generator.py >flatpak-pip-generator.py" 1>&2
+    exit 1
 fi
 
 BASEAPP_ID=`cat org.artisan_scope.artisan.yml | sed 's/^base:\s*//p;d'`
 BASEAPP_VER=`cat org.artisan_scope.artisan.yml | sed 's/^base-version:\s*//p;d' | sed "s/'//g"`
-RUNTIME_ID=`cat org.artisan_scope.artisan.yml | sed 's/^runtime:\s*//p;d'`
-RUNTIME_VER=`cat org.artisan_scope.artisan.yml | sed 's/^runtime-version:\s*//p;d' | sed "s/'//g"`
 
 # Get Python version for req2flatpak
-if which flatpak >/dev/null; then
-    # regular method using flatpak
-    PYTHONVER=`flatpak run --command=python3 $BASEAPP_ID//$BASEAPP_VER --version | sed 's/^Python \([0-9]\+\)\.\([0-9]\+\).*$/\1\2/'`
-elif [ "${RUNTIME_ID}" = "org.kde.Platform" ]; then
-    # on Github Actions, we may not have flatpak run available, fallback to getting it online; assumes kde uses freedesktop
-    FD_VER=`curl -s "https://invent.kde.org/packaging/flatpak-kde-runtime/-/raw/qt${RUNTIME_VER}/org.kde.Sdk.json.in" | sed 's/^\s*"runtime-version":\s*"\(.*\)",$/\1/p;d'`
-    PY_VER=`curl -s "https://gitlab.com/freedesktop-sdk/freedesktop-sdk/-/raw/release/${FD_VER}/elements/include/python3.yml" | sed 's/^\s*ref:\s*//p;d'`
-    PYTHONVER=`echo "$PY_VER" | sed 's/^v\?\([0-9]\+\)\.\([0-9]\+\).*$/\1\2/'`
-else
-    echo "Could not determine Python version; probably the baseapp is different than expected." 1>&2
-    exit 1
-fi
+PYTHONVER=`flatpak run --command=python3 "${BASEAPP_ID}//${BASEAPP_VER}" --version | sed 's/^Python \([0-9]\+\)\.\([0-9]\+\).*$/\1\2/'`
 
 if [ ! "$PYTHONVER" ]; then
-    echo "Could not discover Python version, is the BaseApp installed?" 1>&2
+    echo "Could not discover Python version, is the BaseApp ${BASEAPP_ID}//${BASEAPP_VER} installed?" 1>&2
     exit 1
 fi
 
