@@ -10,7 +10,8 @@ cleanup-commands:
   - for f in /usr/share/fonts/dejavu/*.ttf; do find /app -name `basename $f` -execdir
     ln -sf "$f" \; ; done
   # remove Python test suites
-  - find $FLATPAK_DEST/lib/python* -type d -name tests | grep -v /numpy/ | xargs rm -Rf
+  - find $FLATPAK_DEST/lib/python* -type d -name tests | grep -v /numpy/ | xargs rm
+    -Rf
   # Yoctupuce includes compiled libraries of various platforms *sigh*, only keep what we need
   - |
     python3 <<EOF
@@ -55,8 +56,9 @@ modules:
     buildsystem: autotools
     sources:
       - type: archive
-        url: https://www.phidgets.com/downloads/phidget22/libraries/linux/libphidget22/libphidget22-1.25.20260512.tar.gz
-        sha256: c2b2cf3f7da03a35ec7b074b5027bb95452a7e26f77a0ace38d7b2f667147d5f
+        url: 
+          https://www.phidgets.com/downloads/phidget22/libraries/linux/libphidget22/libphidget22-1.26.20260828.tar.gz
+        sha256: a2d5cc66018b3a79cc406e3d52df06e09444d22e82f7e34e104fa39b6b095dd3
         x-checker-data:
           type: html
           url: https://www.phidgets.com/downloads/phidget22/libraries/linux/libphidget22/
@@ -84,8 +86,9 @@ modules:
       - --buildtype=release
     sources:
       - type: archive
-        url: https://github.com/HOST-Oman/libraqm/releases/download/v0.10.5/raqm-0.10.5.tar.xz
-        sha256: 563053e724892a7b037913110ea2daef50ad575d4fa9f7c368ae1e4515f5e856
+        url: 
+          https://github.com/HOST-Oman/libraqm/releases/download/v0.11.0/raqm-0.11.0.tar.xz
+        sha256: 3d0add115f7d4a9410d3377462ed3c05e86342193ef984183e4380e3787b2d4c
         x-checker-data:
           type: json
           url: https://api.github.com/repos/HOST-Oman/libraqm/releases/latest
@@ -125,8 +128,8 @@ modules:
       - type: archive
         dest-filename: artisan.tar.gz
         # 4.2.0 + updated metainfo file
-        url: https://github.com/artisan-roaster-scope/artisan/archive/a2ed9da9ae0559aaa298079076de89fece828cb1.tar.gz
-        sha256: 54a56361fcf287ae7fad79d6ddbca7184f04a3e8626e2368589f1e0f02f29a5c
+        url: https://api.github.com/repos/artisan-roaster-scope/artisan/tarball/v4.2.0
+        sha256: a6b38dafd2675c64f7905f7d9b7045008d6bff492411c5543408135ec4515ceb
         x-checker-data:
           type: json
           url: https://api.github.com/repos/artisan-roaster-scope/artisan/releases/latest
